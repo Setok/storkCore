@@ -34,6 +34,24 @@ storkCore has been used for the community-oriented money management service,
 Scred.com, in some areas. It was developed for that purpose.
 
 
+What is prototype OO?
+
+It is object-oriented programming, without the concept of classes and 
+instances. Objects are direct copies of any other objects, which thus provide 
+prototype implementations for the new object. storkCore is not a collection
+of classes, it is a collection of objects. They can be used as-is,
+or cloned to create new objects, with possibly added or altered functionality.
+
+Javascript (unlike Java) is, in fact, a prototype programming
+language. As demonstrated by many frameworks, prototype languages can
+also implement a class-based system, if wanted, but they do not have
+to. See:
+
+* http://en.wikipedia.org/wiki/Prototype-based_programming
+* http://selflanguage.org/_static/published/self-power.pdf
+* http://en.wikipedia.org/wiki/Self_(programming_language)
+
+
 Who should I contact with patches/suggestions?
 
 Kristoffer Lawson, setok@scred.com
