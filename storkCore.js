@@ -31,7 +31,7 @@
 var includedNum = 0;
 
 
-var supports = (function() {  
+var cssSupports = (function() {  
    var div = document.createElement('div'),  
       vendors = 'Khtml Ms O Moz Webkit'.split(' '),  
       len = vendors.length;  
