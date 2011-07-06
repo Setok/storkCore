@@ -143,6 +143,13 @@ var Stork = clone(Object);
 
 
 /*****************************************************************************
+ * StorkController is a base view for all controllers within Storkcore.
+ *****************************************************************************/
+
+var StorkController = clone(Stork);
+
+
+/*****************************************************************************
  * StorkView is a base view for all views within Storkcore.
  *****************************************************************************/
 
