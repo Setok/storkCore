@@ -164,6 +164,42 @@ function getTargetElement(event) {
 var Stork = clone(Object);
 
 
+var EventListenerRegistry = clone(Stork);
+
+
+EventListenerRegistry.catchTransitionEnd = function(element, object) {
+    var my = this;
+
+    if (! cssSupports("transitionProperty")) {
+	// Transitions not supported by browser, so directly call the
+	// handler. Transition happened immediately.
+	object.transitionEnd(element);
+    } else {
+	this.transitionEndHandlers[element][object] = function() {
+	    object.transitionEnd(element);
+	}
+	element.addEventListener('webkitTransitionEnd', 
+				 this.transitionEndHandlers[element], false);
+	element.addEventListener('transitionend', 
+				 this.transitionEndHandlers[element], false);
+    }
+}
+
+
+EventListenerRegistry.uncatchTransitionEnd = function(element, object) {
+    if (! cssSupports("transitionProperty")) {
+	return;
+    }
+    element.removeEventListener('webkitTransitionEnd',
+				this.transitionEndHandlers[element][object], 
+				false);
+    element.removeEventListener('transitionend',
+				this.transitionEndHandlers[element][object], 
+				false);
+    this.transitionEndHandlers[element] = undefined;
+}
+
+
 /*****************************************************************************
  * StorkController is a base view for all controllers within Storkcore.
  *****************************************************************************/
