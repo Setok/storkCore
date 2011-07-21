@@ -166,6 +166,7 @@ var Stork = clone(Object);
 
 var EventListenerRegistry = clone(Stork);
 
+EventListenerRegistry.transitionEndHandler = [];
 
 EventListenerRegistry.catchTransitionEnd = function(element, object) {
     var my = this;
