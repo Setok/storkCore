@@ -53,6 +53,33 @@ var cssSupports = (function() {
 })();  
 
 
+/** Checks to see if 'element' has a 'class'. **/
+
+function hasClass(element, className) {
+    return element.className.match(new RegExp('(\\s|^)' + className + 
+					      '(\\s|$)'));
+}
+
+
+/** Add 'className' to class definition of 'element'. **/
+
+function addClass(element, className) {
+    if (! this.hasClass(element, className)) {
+	element.className += " " + className;
+    }
+}
+
+
+/** Remove the 'class' from the class definition of 'element. **/
+
+function removeClass(element, className) {
+    if (hasClass(element,className)) {
+	var re = new RegExp('(\\s|^)' + className + '(\\s|$)');
+	element.className=element.className.replace(re,' ');
+    }
+}
+
+
 function addLoadEvent(func) { 
     var oldonload = window.onload; 
     if (typeof window.onload != 'function') { 
@@ -202,7 +229,29 @@ EventListenerRegistry.uncatchTransitionEnd = function(element, object) {
 
 
 /*****************************************************************************
- * StorkController is a base view for all controllers within Storkcore.
+ * Base for all model objects within StorkCore
+ *****************************************************************************/
+
+var StorkModel = clone(Stork);
+
+
+StorkModel.init = function() {
+    this.modelProperties = {};
+    return this;
+}
+
+StorkModel.setProperty = function(key, value) {
+    this.modelProperties[key] = value;
+}
+
+
+StorkModel.getProperty = function(key) {
+    return this.modelProperties[key];
+}
+
+
+/*****************************************************************************
+ * Base for all controllers within Storkcore.
  *****************************************************************************/
 
 var StorkController = clone(Stork);
