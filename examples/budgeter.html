@@ -1,0 +1,29 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Test Budgeting</title>
+</head>
+
+<body>
+<script type="text/javascript" src="../storkCore.js"></script>
+<script type="text/javascript" src="../budgeter.js"></script>
+<div id="test">
+<table id="test_budgetTable">
+  <tr style="font-weight: bold;" id="test_categoryRowTemplate">
+    <td>Category</td>
+    <td>242</td>
+  </tr>
+  <tr id="test_budgetRowTemplate">
+    <td id="test_budgetRowTitleTemplate">Sub-Category</td>
+    <td><input type="text" id="test_budgetRowSumTemplate" value="242"></td>
+  </tr>
+</table>
+
+<script>
+BudgetView.connectDesign("test");
+BudgetView.update();
+</script>
+
+<hr>
+<address></address>
+<!-- hhmts start --> Last modified: Tue Jan 11 20:54:15 EET 2011 <!-- hhmts end -->
+</body> </html>

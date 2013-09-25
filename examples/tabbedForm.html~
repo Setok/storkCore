@@ -1,0 +1,194 @@
+<html>
+<body>
+<script type="text/javascript">
+var StorkCoreRoot = "../"
+</script>
+
+<script type="text/javascript" src="../storkCore.js"></script>
+
+<div style="text-align: left; margin-left: 3em; display: inline-block;">
+
+  <h3>Overview</h3>
+
+  <p>
+    {% if balance.is_zero %}
+    {{ pool.name }} does not owe 
+    <a href="{% url user claimant.username %}">
+      {{ claimant.displayname }}</a>
+    anything.      
+    {% else %}
+    {% if balance.is_positive %}      
+    <a href="{% url user claimant.username %}">
+      {{ claimant.displayname }}</a>
+    owes the group {{ account.balance_balance }}.
+    {% else %}
+    {{ pool.name }} owes {{ balance.negate }} to 
+    <a href="{% url user claimant.username %}">
+      {{ claimant.displayname }}</a>.
+    {% endif %}
+    {% endif %}
+  </p>
+
+  {# Only show form if group owes user something #}
+  {% if balance.is_zero %}
+  <div class="multi_form_select" id="reimbursementDialog" 
+       style="display: none;">
+  </div>
+  {% endif %}
+  {% if balance.is_positive %}
+  <div class="multi_form_select" id="reimbursementDialog" 
+       style="display: none;">
+  </div>
+  {% else %}
+  <div class="multi_form_select" id="reimbursementDialog" 
+       style="display: inline-block; text-align: left; margin-left: 2.5em;">
+    <div class="content" style="text-align: center;">
+      <p>
+	Loading
+      </p>
+      <img src="{{ MEDIA_URL }}/images/loading.gif">
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Container div for forms to be showed in 'reimbursementDialog' by
+       storkCore tabbed view -->
+  <div style="display:none;">
+    <form method="post" id="paypalForm"
+	  action="{% url expense-claims-manage-pay pool.name account.code %}">
+    <div class="form_content" style="min-width: 25em; min-height: 11em;">
+      <center>
+	    <div class="info_layout">
+	      <div class="info">
+		Reimburse by direct PayPal payment!
+	      </div>
+	    </div>
+
+      <table style="margin-top: 1.5em;">
+      {% with paypal_form as form %}
+      {% include "form_snippet.html" %}
+      {% endwith %}
+      </table>
+      </center>
+    </div>  <!-- form_content -->
+    <div class="form_buttons">
+	  <input type="hidden" name="form" value="paypal">
+	  <input type="submit" name="paypal" value="Pay">
+    </div>
+    </form>
+
+    <form method="post" id="elsewhereForm"
+	  action="{% url expense-claims-manage-pay pool.name account.code %}">
+      <div class="form_content" style="min-width: 25em; min-height: 11em;">
+	<center>
+	    <div class="info_layout">
+	      <div class="info">
+		Use this form if reimbursed outside Scred
+	      </div>
+	    </div>
+
+      <table>
+	{% with payment_form as form %}
+	{% include "form_snippet.html" %}
+	{% endwith %}
+	</table>
+      </center>
+      </div>  <!-- form_content -->
+      <div class="form_buttons">
+	    <input type="hidden" name="form" value="payment">
+	    <input type="submit" name="payment" value="Record Payment">
+      </div>
+    </form>
+  </div>
+
+    <!-- Storkcore tab selection -->
+    <script type="text/javascript">
+
+    // This is called once document has loaded.
+    loadedCallback = function() {
+	// Controller for the view selection
+        formSelectController = clone(ViewSelectController);  
+        formSelectController.viewOptions = [
+	    {text: "Pay with PayPal", value: "paypal"},
+	    {text: "Paid Elsewhere", value: "elsewhere"}]
+	formSelectController.selectedView = "paypal";
+      
+	formSelectController.setViewElement("paypal", "paypalForm");
+	formSelectController.setViewElement("elsewhere", "elsewhereForm");
+
+	// View for the view selection
+        formSelect = clone(ClickViewSelect);
+        formSelect.parentElement = 
+	    document.getElementById("reimbursementDialog");
+        formSelect.delegate = formSelectController;
+        formSelect.render();
+     }
+
+     window.onload = loadedCallback;
+     </script>
+
+    <table class="list_report" style="margin-top: 2em;" width="70%" border="0">
+      <caption>Logged Expense Claims &amp; Reimbursements</caption>
+      <tr>
+	<th>Date</th>
+	<th>Type</th>
+	<th>Sum</th>
+	<th>Description</th>
+	<th></th>
+	<th></th>
+      </tr>
+
+      {% for t in transfers %}
+      <tr>
+	<td>
+	  <span style="white-space: nowrap;">
+	    {{ t.date|date:"M j," }}
+	  </span>
+	  {{ t.date|date:"Y" }}
+	</td>
+	<td>
+	  {# FIXME: We should derive this from the transaction type. #}
+	  {% if t.value_as_money.is_positive %}
+	  Reimbursement
+	  {% else %}
+	  Expense claim
+	  {% endif %}
+	</td>
+	<td>
+	  <span class="sum">
+	    {# FIXME: This should also happen using the transaction type. #}
+	    {% if t.value_as_money.is_positive %}
+	    {{ t.value_as_money }}
+	    {% else %}
+	    {{ t.value_as_money.negate }}
+	    {% endif %}
+	  </span>
+	</td>
+	<td>
+	  {{ t.transaction.description }}
+	</td>
+	<td valign="center">
+	  <div style="white-space: nowrap; vertical-alignment: middle;">
+	    {% if t.transaction.get_attachments %}
+	    <a href="{% url mcng-transaction pool.name t.transaction.code %}">
+	      <img src="{{ MEDIA_URL }}/images/Paperclip4-black-24.png" 
+		   style="border: solid black 0px; vertical-align: middle;"
+		   alt="Attachments">
+	    </a>
+	    <span style="vertical-align: middle;">
+	      {{ t.transaction.get_attachments|length }}
+	    </span>
+	  </div>
+	  {% endif %}
+	<td style="white-space: nowrap;">	  
+	  <a class="small_button" 
+	     href="{% url mcng-transaction pool.name t.transaction.code %}">
+	    View
+	  </a>
+	  &nbsp;
+      </tr>
+      {% endfor %}
+    </table>
+
+</div>
+
