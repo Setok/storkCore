@@ -1,0 +1,79 @@
+<!-- Show how to build a list of lists with storkCore -->
+
+<html>
+    <head>
+        <script type="text/javascript" src="../storkCore.js">
+            </script>
+        <script type="text/javascript" src="../buttonController.js">
+            </script>
+
+        <script type="text/javascript" src="../bean.js">
+            </script>
+
+        <script type="text/javascript" src="../list.js">
+            </script>
+        
+    </head>
+    <body>
+      <div style="border: solid red 2px;" id="sectionedList">
+      </div>
+      <div style="display: none;">
+        <!-- section -->
+        <div style="border: solid black 1px;" id="section_#n">
+          <h3 id="sectionTitle_#n"></h3>
+          <ul id="sublist_#n"></ul>
+        </div>
+
+        <ul>
+          <!-- item in list in section -->
+          <li id="item_#n"><span id="text_#n"></span></li>
+        </ul>
+        </div>
+    </body>
+    
+    <script type="text/javascript">
+      console.debug("ListOfListsItem sublistcontroller: ", ListOfListsItem.getSubListController());
+
+        var sectionListController = clone(ListController);
+        sectionListController.setListContainer(elementByID("sectionedList"));
+
+        /* Set up what happens within each sublist */
+        var subListController = ListOfListsItem.getSubListController();
+        var subListItemController = clone(ListItemController);
+        subListItemController.setItemTemplate(elementByID("item_#n"));
+        subListItemController.linkTextProperty("text", "text");
+        subListController.setItemControllerPrototype(subListItemController);
+
+        /* Set up what is done with each section */
+        var listOfListsItem = clone(ListOfListsItem);
+        listOfListsItem.setItemTemplate(elementByID("section_#n"));
+        listOfListsItem.linkTextProperty("title", "sectionTitle");
+        /* The ID prefix of the element containing the sublist (will be
+           "sublist_#n" in this case */
+        listOfListsItem.setSubListContainerID("sublist");
+        /* The property from each element that will contain the model for 
+        the sublist */
+        listOfListsItem.setSubListModelProperty("list");
+
+        sectionListController.setItemControllerPrototype(listOfListsItem);
+        
+        // Section 1 items model
+        var firstItems = [{text: "Foo"}, {text: "Bar"}];        
+        var firstItemsModel = clone(ListModel);
+        firstItemsModel.setItemsFromArray(firstItems);
+
+        // Section 2 items model
+        var secondItems = [{text: "Goo"}, {text: "Gah"}];        
+        var secondItemsModel = clone(ListModel);
+        secondItemsModel.setItemsFromArray(secondItems);
+
+        // Make the two lists into items of the sction lists
+        var sectionData = [{title: "Section 1", list: firstItemsModel},
+        {title: "Section 2", list: secondItemsModel}];
+
+        var sectionModel = clone(ListModel);
+        sectionModel.setItemsFromArray(sectionData);
+
+        sectionListController.setModel(sectionModel);
+        </script>
+</html>

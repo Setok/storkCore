@@ -1,0 +1,32 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../storkCore.js">
+    </script>
+    <script type="text/javascript" src="../bean.js">
+    </script>
+
+  </head>
+
+<body>
+  <p>
+    Enter capital 'F' or return to cause magic!
+  </p>
+
+  <form action="/">
+    <input type="text" value="" name="" id="testField" />
+  </form>
+</body>
+
+    <script type="text/javascript">
+      var element = elementByID("testField");
+
+      var ctrl = clone(StorkController);
+      ctrl.foo = function(controller, key) {
+      console.debug("foo keycode: " + key)
+      alert("Hello, setok");
+      }
+      ctrl.attach(element);
+      ctrl.bindKey("F", ctrl, "foo");
+      ctrl.bindKey("<<return>>", ctrl, "foo");
+    </script>
+</html>

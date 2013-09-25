@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <script type="text/javascript" src="../storkCore.js">
+            </script>
+        <script type="text/javascript" src="../bean.js">
+            </script>
+        <script type="text/javascript" src="../list.js">
+            </script>
+        <script type="text/javascript" src="../buttonController.js">
+            </script>
+        
+    </head>
+    <body>
+      <p>
+        List should be "fuu, Bar"
+      </p>
+      
+        <ul id="list">  <!-- Container element -->
+          <!-- Actual list items will be copied into here -->
+        </ul>
+        <div style="display: none;">
+            <ul>
+              <!-- 'Template' for each item in the list -->
+              <li id="item_#n"><span id="text_#n"></span></li>
+            </ul>
+        </div>
+    </body>
+    
+    <script type="text/javascript">
+        ListController.setListContainer(elementByID("list"));
+        
+        ListItemController.setItemTemplate(elementByID("item_#n"));
+        ListItemController.linkTextProperty("text", "text");
+        ListController.setItemControllerPrototype(ListItemController);
+        
+        var model = [{text: "Foo"}, {text: "Bar"}];        
+        ListModel.setItemsFromArray(model);
+        ListController.setModel(ListModel);
+        
+        var itemModel = ListModel.getItemModel(0);
+        itemModel.setProperty("text", "fuu"); 
+        </script>
+</html>

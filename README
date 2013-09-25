@@ -1,37 +1,42 @@
-NOTE: This is experimental stuff. While it will generally work, the purpose
-is for experimenting with ideas of how I would like to see a JS framework
-operate. Some or all ideas might be bad! Also, things can change quite
-dramatically with development.
+NOTE: This is still somewhat experimental. It will work, is stable and is 
+used by Holvi.com for the frontend. However, elements of the
+architecture may yet change in backwards incompatible ways. It is the
+result of experimentation and learning over several years and is now
+close to how it should work.
 
 
 What is this?
 
-storkCore is a Javascript UI library which attemps a few things:
+storkCore is a Javascript UI framework which attemps a few things:
 
-* To use some form of MVC patterns for the UI components. Cocoa will likely
-  be the main influence here.
-  
 * To not use traditional class-based object oriented programming, but to use
-  prototype style OO instead.
-  
+  prototype style OO instead. Objects are cloned, not instantiated (see
+  the Self language).
+
+* To use some form of MVC patterns for the UI components. But also to
+  keep things simple and not to build a massive framework.
+    
 * Should not require extended backend support or any particular language or
   implementation there (e.g. Ruby). It also should not need to take over the
   complete browser window (unlike Sproutcore).
 
-* Styling of the UI widgets should mostly be left to CSS.
+* Styling of the UI widgets should mostly be left to CSS. HTML should
+  mostly be given to storkCore objects, and manipulated, instead of
+  created by storkCore. storkCore objects attach to already-existing 
+  HTML.
 
-This was developed due to the author being very unsatisfied and uninspired
-by the JS UI libraries out there. It seemed there was nothing unique and
-imaginative. Many were heavy, trying to solve everything from OO programming
-to DOM manipulation and Ajax, or by requiring the coder to support the full
-stack used for the framework, from backend upwards.
+* Avoid external dependencies as much as possible.
+
+This was developed due to the author being very unsatisfied and
+uninspired by the JS UI libraries out there at the time. It seemed
+there was nothing unique and imaginative. Many were heavy, trying to
+solve everything from OO programming to DOM manipulation and Ajax, or
+by requiring the coder to support the full stack used for the
+framework, from backend upwards.
 
 In comparison storkCore tries to keep things simple and to focus on laying
 out a basic framework for UI development, without solving everything at
 once, and thus tying the developer to certain solutions.
-
-storkCore has been used for the community-oriented money management service,
-Scred.com, in some areas. It was developed for that purpose.
 
 
 What is prototype OO?
@@ -54,7 +59,7 @@ to. See:
 
 Who should I contact with patches/suggestions?
 
-Kristoffer Lawson, setok@scred.com
+Kristoffer Lawson, setok@holvi.com
 
 
 Licensing?

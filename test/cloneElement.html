@@ -1,0 +1,35 @@
+<html>
+  <head>
+    <script type="text/javascript" src="../storkCore.js">
+    </script>
+
+    <style type="text/css">
+      .test {
+      border: solid red 3px;
+      display: inline-block;
+      }
+    </style>
+
+  </head>
+
+<body>
+<div id="container">
+  <div class="test" id="testElement">
+    Foobar
+  </div>
+</div>
+</body>
+
+    <script type="text/javascript">
+      var element = elementByID("testElement");
+      var container = elementByID("container");
+
+      console.debug(element);
+      container.removeChild(element);
+      var element2 = clone(element);
+      console.debug("id: " + element2.id + element2.getAttribute("id"));
+      //element2.id = "test2";
+      console.debug(element2);
+      container.appendChild(element2);
+    </script>
+</html>

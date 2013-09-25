@@ -1,0 +1,39 @@
+<!-- Show how to build a list of lists with storkCore -->
+
+<html>
+    <head>
+        <script type="text/javascript" src="../storkCore.js">
+            </script>
+   </head>
+    <body>
+      <p>
+        Should say Hello, Setok, then Hello, Senna.
+      </p>
+      
+          <script type="text/javascript">
+            var testOb = clone(Stork);
+
+            var cloneThis = clone(Stork);
+            cloneThis.text = "hello, ";
+            cloneThis.who = "Setok";
+            console.debug("text: " + cloneThis.text + ", who: " + cloneThis.who);
+            
+            testOb.clonedProperty("subob", cloneThis);
+            console.debug("testOb: ", testOb);
+            
+            var testOb2 = clone(testOb);
+            testOb2.subob.who = "Senna";
+
+            var testOb3 = clone(testOb2);
+            testOb3.subob.who = "Ada";
+
+            var subob = clone(testOb.subob);
+            subob.who = "Juoni";
+
+            alert("" + testOb.subob.text + testOb.subob.who);
+            alert("" + testOb2.subob.text + testOb2.subob.who);
+
+          </script>
+
+    </body>
+</html>

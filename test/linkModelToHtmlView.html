@@ -1,0 +1,155 @@
+<!-- Tests features for updating a view automatically based on properties
+     in a model. Ie. binding views to model properties. -->
+
+<html>
+    <head>
+        <script type="text/javascript" src="../storkCore.js">
+            </script>
+        <script type="text/javascript" src="../bean.js">
+            </script>
+
+    </head>
+    <body>
+      <p>
+        The following person should be Setok:
+      </p>
+      <table id="person">
+        <tr>
+          <th>Name</th>
+          <td id="name"></td>
+        </tr>
+        <tr>
+          <th>Phone Number</th>
+          <td id="phone"></td>
+          </tr>
+      </table>
+
+      <p>
+        The following should contain an exact replica of the first, within
+        the red borders, even 
+        reflecting
+        the same model changes:
+      </p>
+      <div id="twinperson" style="border: solid 1px red;">
+      </div>
+
+      <p>
+        The following person should have a completely different model,
+        with the person being Senna
+        (in green borders):
+      </p>
+      <div id="newperson" style="border: solid 1px green;">
+      </div>
+
+      <p id="attrTest">
+        <span id="changeattr" class="foo">Check class changed to "bar"</span>
+      </p>
+
+      <div id="imageviewer">
+      <p>
+        The following should show a Caterham 7:
+      </p>
+      <img id="showimg" src="" />
+      </div>
+
+      <p id="colourTest">
+        The colour of the day is: <span id="dayColour"></span>.
+        (Should be British Racing Green)
+      </p>
+
+      <p id="random">
+        Here's a random number: <span id="rndNumber"></span>.
+      </p>
+
+      <script type="text/javascript">
+        // Set details of an example person. Basic link testing.
+        var personView = clone(StorkHtmlView);
+        //personView.init();
+        personView.linkPropertyToText("name", "name");
+        personView.linkPropertyToText("phone", "phone");
+        personView.attach(elementByID("person"));
+
+        StorkModel.setProperties({name: "Kris", phone: "04224242"});
+        personView.setModel(StorkModel);
+
+        var personView2 = clone(personView);
+        //personView2.init();
+        personView2.appendToElement(elementByID("twinperson"));
+
+        var differentPerson = clone(personView2);
+        //differentPerson.init();
+        differentPerson.appendToElement(elementByID("newperson"));
+        var differentModel = clone(StorkModel);
+        differentModel.setProperty("name", "Senna");
+        differentModel.setProperty("phone", "31337");
+        differentPerson.setModel(differentModel);
+
+        StorkModel.setProperty("name", "King");
+
+        // Switch name of first (and thus second) person, every second
+        var king = 1;
+        setInterval(function() {
+            if (king) {
+                StorkModel.setProperty("name", "Setok");
+            } else {
+                StorkModel.setProperty("name", "King");
+            }
+            king = king ^ 1;
+        }, 1000);
+
+        // Test attribute linking
+        var classChangeView = clone(StorkHtmlView);
+        var model2 = clone(StorkModel);
+        classChangeView.linkPropertyToAttr("class", "changeattr", "class");
+        classChangeView.attach(elementByID("attrTest"));
+        model2.setProperties({class: "bar"});
+        classChangeView.setModel(model2);
+
+        // Test mapping StorkModel properties to attribute values.
+        // Note: should fetch these images localy so test is properly
+        // encapsulated
+        var imgView = clone(StorkHtmlView);
+        var imgModel = clone(StorkModel);
+        imgView.mapPropertyToAttr("image", "showimg", "src", {
+            woman: "images/jris3.jpg",
+            car: "images/christening.jpg"
+        });
+        imgView.attach(elementByID("imageviewer"));
+        imgModel.setProperties({image: "car"});
+        imgView.setModel(imgModel);
+
+        // Test linking a property to a method
+        var colourView = clone(StorkHtmlView);
+        var colourModel = clone(StorkModel);
+        colourView.colourUpdate = function(property, elementIDMap) {
+           var colour;
+
+           colour = this.model.getProperty(property);
+           var element = elementIDMap["colourElement"];
+           element = elementByID(element);
+           emptyElement(element);
+           if (colour == "green") {
+              setTextOfElement(element, "British Racing Green");
+           } else {
+              setTextOfElement(element, "Ferrari Red");
+           }
+        }
+        colourView.linkPropertyToMethod("colour", "colourUpdate",
+                                        {colourElement: "dayColour"});
+        colourModel.setProperties({colour: "green"});
+        colourView.attach(elementByID("colourTest"));
+        colourView.setModel(colourModel);
+
+        // Test linking to a property provided by a method in the model
+        var rndView = clone(StorkHtmlView);
+        rndView.attach(elementByID("random"));
+        rndView.linkPropertyMethodToText("number", "rndNumber");
+        var rndModel = clone(StorkModel);        
+        rndModel.number = function() {
+            return Math.random();
+        }
+        rndView.setModel(rndModel);
+      </script>
+    </body>
+</html>
+

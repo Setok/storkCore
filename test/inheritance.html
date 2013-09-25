@@ -1,0 +1,61 @@
+<html>
+    <head>
+        <script type="text/javascript" src="../storkCore.js">
+            </script>
+        <script type="text/javascript" src="../list.js">
+            </script>
+        
+    </head>
+    <body>
+      <p>
+        Should alert with:
+      </p>
+      <p>
+        Hello Setok, Lawson
+      </p>
+      <p>
+        Your cats: Juonipentu Retalainen Ada-san Hopo
+      </p>
+      <p>
+        The end
+      </p>
+        
+    </body>
+    
+    <script type="text/javascript">
+        var ob1 = clone(Stork);
+        
+        ob1.hello = function(firstname, surname) {
+            alert("hello, " + firstname + " " + surname);
+            this.cats(["Juonipentu", "Retalainen", "Ada-san"]);            
+        }
+        
+        ob1.cats = function(cats) {
+            var catString = "";
+            
+            for (var i = 0; i < cats.length; i++) {
+                catString = catString + cats[i] + " ";
+            }
+            
+            alert("Your cats: " + catString);
+        }
+        
+        var ob2 = clone(ob1);
+        ob2.hello = function(firstname, surname) {
+            this.superMethod(ob2.hello, "hello", firstname, surname);
+            //ob1.hello.call(this, firstname, surname);
+            alert("the end");
+        }
+        
+        ob2.cats = function(cats) {
+            cats.push("Hopo");
+            this.superMethod(ob2.cats, "cats", cats); 
+            //ob1.cats.call(this, cats);
+
+        }
+        
+        var instance = clone(ob2);
+        instance.hello("Setok", "Lawson");
+    
+        </script>
+</html>

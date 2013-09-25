@@ -1,0 +1,25 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html> <head>
+<title>Test Per-Object Properties</title>
+</head>
+
+<body>
+<script type="text/javascript" src="../storkCore.js"></script>
+
+<script>
+  var modelOne = clone(StorkModel).init();
+  console.log("model 1 before setup:");
+  console.log(modelOne);
+  modelOne.setProperty("title", "foo");
+
+  var modelTwo = clone(StorkModel).init();
+  modelTwo.setProperty("title", "bar");
+
+  console.log("model 1:");
+  console.log(modelOne);
+
+  console.log("model 2:");
+  console.log(modelTwo);
+</script>
+</body>
+</html>

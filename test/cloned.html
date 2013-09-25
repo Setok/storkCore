@@ -1,0 +1,26 @@
+<!-- Tests features for updating a view automatically based on properties
+     in a model. Ie. binding views to model properties. -->
+
+<html>
+    <head>
+        <script type="text/javascript" src="../storkCore.js">
+            </script>
+        <script type="text/javascript" src="../bean.js">
+            </script>
+
+    </head>
+    <body>
+      Should get two 'cloned' alerts.
+
+      <script type="text/javascript">
+        // Set details of an example person. Basic link testing.
+        console.debug("Test starting");
+        var personView = clone(StorkHtmlView);
+        personView.cloned = function() {
+            alert("cloned!");
+        }
+        var secondPersonView = clone(personView);
+        var thirdPersonView = clone(secondPersonView);
+      </script>
+    </body>
+</html>
